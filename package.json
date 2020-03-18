@@ -1,0 +1,28 @@
+{
+  "name": "@lowinc/dva-t",
+  "version": "0.0.1",
+  "description": "为dva事件调用之前包裹ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "private": false,
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LOWINC/DVA-T.git"
+  },
+  "keywords": [
+    "dva-t"
+  ],
+  "author": "lowinc",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LOWINC/DVA-T/issues"
+  },
+  "homepage": "https://github.com/LOWINC/DVA-T#readme"
+}
