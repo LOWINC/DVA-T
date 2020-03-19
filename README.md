@@ -6,22 +6,27 @@
 
 ## 使用
 
-user.ts
+
+
+
+
+> store: user.ts
 
 ```ts
-import {createDispatch, createSave} from "@lowinc/dva-t";
+import { createEffect, createSave, callFun } from '@lowinc/dva-t';
 
-const dispatch = createDispatch<typeof moduleUser.effects>();
-const save = createSave<typeof moduleUser.state>();
+// 自己和其他模块调用
+export const { put, action } = createEffect<typeof moduleUser.effects>('user');
+export const save = createSave<typeof moduleUser.state>('user');
 
 const moduleUser = {
   namespace: "user",
   state: {
-    type: "user",
+    type: 'user',
     user: {
-      name: "lowinc",
-      age: 100
-    }
+      name: 'lowinc',
+      age: 100,
+    },
   },
   reducers: {
     // 和createSave关联
@@ -34,20 +39,32 @@ const moduleUser = {
     }
   },
   effects: {
-    *foo(params: {payload: {name: string; age: number}}, {put}) {
-      yield put(dispatch("bar", {payload: {name: "laosiji", age: 18}}));
+    *testCall({}, {}) {
+      yield callFun(Taro.showToast, { title: 'asd', icon: 'none' });
+      yield put('foo', { payload: { name: 'swq', age: 10 } });
     },
-    *bar(params: {payload: {name: string; age: number}}, {put}) {
-      yield put(save("type", "root"));
-      yield put(save("user", {name: "laosiji", age: 18}));
-    }
+    *foo(params: { payload: { name: string; age: number } }) {
+      yield put('bar', { payload: { id: '1', age: 10 } });
+    },
+    *bar(params: { payload: { id: string; age: number } }) {
+      yield save('user', { name: 'swq', age: 18 });
+    },
   }
 };
 
-// pages.tsx
-export const userDispatch = createDispatch<typeof moduleUser.effects>("user");
+
 // store.ts
 export default moduleUser;
 
+
+```
+
+> page: user.tsx
+
+```ts
+
+  useDidShow(() => {
+    props.dispatch(action('testCall', { payload: {} }));
+  });
 
 ```
