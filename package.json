@@ -24,5 +24,8 @@
   "bugs": {
     "url": "https://github.com/LOWINC/DVA-T/issues"
   },
-  "homepage": "https://github.com/LOWINC/DVA-T#readme"
+  "homepage": "https://github.com/LOWINC/DVA-T#readme",
+  "dependencies": {
+    "redux-saga": "^1.1.3"
+  }
 }
