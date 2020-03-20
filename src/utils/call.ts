@@ -1,8 +1,8 @@
-import {call} from "redux-saga/effects";
+import {call as sagaCall} from "redux-saga/effects";
 
-export function callFun<F extends (...args: any) => any>(
+export function call<F extends (...args: any) => any>(
   fun: F,
   ...params: Parameters<F>
 ) {
-  return call(fun, ...params);
+  return sagaCall(fun, ...params);
 }
