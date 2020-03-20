@@ -1,6 +1,15 @@
 import {take, select} from "redux-saga/effects";
 
-export function* after(effect, selector, judger) {
+type Selector<T> = (store: any) => T;
+
+// TODO:
+// 1. effect 提示
+// 2. once
+export function* after<T>(
+  effect: string,
+  selector: Selector<T>,
+  judger: (params: ReturnType<Selector<T>>) => boolean
+) {
   let res = yield select(selector);
   const isPass = !!judger(res);
   if (!isPass) {
