@@ -6,20 +6,17 @@
 
 ## 使用
 
-
-
-
-
 > store: user.ts
 
 ```ts
-import { createEffect, createSave, callFun } from '@lowinc/dva-t';
+import { createEffect, createSave, call, after } from '@lowinc/dva-t';
 
 // 自己和其他模块调用
-export const { put, action } = createEffect<typeof moduleUser.effects>('user');
-export const save = createSave<typeof moduleUser.state>('user');
+export const { put, action } = createEffect<typeof modelUser.effects>('user');
+export const save = createSave<typeof modelUser.state>('user');
+export type UserState = typeof modelUser.state;
 
-const moduleUser = {
+const modelUser = {
   namespace: "user",
   state: {
     type: 'user',
@@ -40,21 +37,29 @@ const moduleUser = {
   },
   effects: {
     *testCall({}, {}) {
-      yield callFun(Taro.showToast, { title: 'asd', icon: 'none' });
-      yield put('foo', { payload: { name: 'swq', age: 10 } });
+      yield call(Taro.showToast, { title: 'asd', icon: 'none' });
+      yield put('testFoo', { payload: { name: 'swq', age: 10 } });
     },
-    *foo(params: { payload: { name: string; age: number } }) {
-      yield put('bar', { payload: { id: '1', age: 10 } });
+    *testFoo(params: { payload: { name: string; age: number } }) {
+      yield put('testBar', { payload: { id: '1', age: 10 } });
     },
-    *bar(params: { payload: { id: string; age: number } }) {
-      yield save('user', { name: 'swq', age: 18 });
+    *testBar(params: { payload: { id: string; age: number } }) {
+      yield save('user', { name: 'root', age: 18 });
+    },
+    *testAfter(params: { payload: { id: string; age: number } }) {
+      const res = yield after(
+        'user/testBar',
+        (store:UserState) => store.type,
+        data => data.name === 'root',
+      );
+      console.log('after res', res);
     },
   }
 };
 
 
 // store.ts
-export default moduleUser;
+export default modelUser;
 
 
 ```
