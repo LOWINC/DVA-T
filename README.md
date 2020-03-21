@@ -9,7 +9,7 @@
 > store: user.ts
 
 ```ts
-import { createEffect, createSave, call, after } from '@lowinc/dva-t';
+import { createEffect, createSave, call } from '@lowinc/dva-t';
 
 // 自己和其他模块调用
 export const { put, action } = createEffect<typeof modelUser.effects>('user');
@@ -45,14 +45,6 @@ const modelUser = {
     },
     *testBar(params: { payload: { id: string; age: number } }) {
       yield save('user', { name: 'root', age: 18 });
-    },
-    *testAfter(params: { payload: { id: string; age: number } }) {
-      const res = yield after(
-        'user/testBar',
-        (store:UserState) => store.type,
-        data => data.name === 'root',
-      );
-      console.log('after res', res);
     },
   }
 };
