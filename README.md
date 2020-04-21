@@ -29,6 +29,8 @@ export const Dva = {
 export const modules = [user, shop, address];
 ```
 
+> store: user.ts
+
 ```ts
 import {Dva} from "./index";
 
@@ -65,8 +67,6 @@ export default {
     },
   },
 };
-
-// store.ts
 ```
 
 > page: user.tsx
