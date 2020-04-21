@@ -1,4 +1,4 @@
-# dva事件类型包裹
+# dva 事件类型包裹
 
 ## 安装
 
@@ -6,22 +6,40 @@
 
 ## 使用
 
-> store: user.ts
+> store: index.ts
 
 ```ts
-import { createEffect, createSave, call } from '@lowinc/dva-t';
+import {call, create} from "@lowinc/dva-t";
 
-// 自己和其他模块调用
-export const { put, action } = createEffect<typeof modelUser.effects>('user');
-export const save = createSave<typeof modelUser.state>('user');
+import user from "./user.ts";
+import shop from "./shop.ts";
+import address from "./address.ts";
+
+// dva辅助函数
+export const Dva = {
+  helpers: {
+    call,
+  },
+  User: create(user),
+  Shop: create(shop),
+  Address: create(address),
+};
+
+// store
+export const modules = [user, shop, address];
+```
+
+```ts
+import {Dva} from "./index";
+
 export type UserState = typeof modelUser.state;
 
-const modelUser = {
+export default {
   namespace: "user",
   state: {
-    type: 'user',
+    type: "user",
     user: {
-      name: 'lowinc',
+      name: "lowinc",
       age: 100,
     },
   },
@@ -31,37 +49,31 @@ const modelUser = {
     save(state, {payload}) {
       return {
         ...state,
-        ...payload
+        ...payload,
       };
-    }
+    },
   },
   effects: {
     *testCall({}, {}) {
-      yield call(Taro.showToast, { title: 'asd', icon: 'none' });
-      yield put('testFoo', { payload: { name: 'swq', age: 10 } });
+      yield Dva.helpers.call(Taro.showToast, {title: "asd", icon: "none"});
     },
-    *testFoo(params: { payload: { name: string; age: number } }) {
-      yield put('testBar', { payload: { id: '1', age: 10 } });
+    *testFoo(params: {payload: {name: string; age: number}}) {
+      yield Dva.User.put("testBar", {payload: {name: "lowinc", age: 100}});
     },
-    *testBar(params: { payload: { id: string; age: number } }) {
-      yield save('user', { name: 'root', age: 18 });
+    *testBar(params: {payload: {id: string; age: number}}) {
+      yield Dva.User.save("user", {name: "root", age: 18});
     },
-  }
+  },
 };
 
-
 // store.ts
-export default modelUser;
-
-
 ```
 
 > page: user.tsx
 
 ```ts
-
-  useDidShow(() => {
-    props.dispatch(action('testCall', { payload: {} }));
-  });
-
+import {Dva} from "@/store";
+useDidShow(() => {
+  props.dispatch(Dva.User.action("testCall", {payload: {}}));
+});
 ```
