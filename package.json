@@ -1,6 +1,6 @@
 {
   "name": "@lowinc/dva-t",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "为dva事件调用之前包裹ts",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
