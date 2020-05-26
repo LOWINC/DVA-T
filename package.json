@@ -9,8 +9,8 @@
     "dist"
   ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc"
+    "build": "tsc",
+    "test": "jest --jest.config.js"
   },
   "repository": {
     "type": "git",
@@ -27,5 +27,11 @@
   "homepage": "https://github.com/LOWINC/DVA-T#readme",
   "dependencies": {
     "redux-saga": "^1.1.3"
+  },
+  "devDependencies": {
+    "@types/jest": "^25.2.2",
+    "jest": "^26.0.1",
+    "ts-jest": "^26.0.0",
+    "typescript": "^3.9.3"
   }
 }

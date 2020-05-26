@@ -1,6 +1,4 @@
-import {put} from "redux-saga/effects";
-
-export {call} from "./utils/call";
+export {put, call} from "redux-saga/effects";
 
 type Mode = {
   namespace: any;
@@ -10,24 +8,24 @@ type Mode = {
 };
 
 type Action<R extends any> = {
-  [K in keyof R]: (params: Parameters<R[K]>[0]) => ReturnType<R[K]>;
+  // TODO: jest 类型错误
+  // [K in keyof R]: (params: any) => {type: string; payload: any};
+  [K in keyof R]: (params: Parameters<R[K]>[0]) => {type: string; payload: any};
 };
 
 type Mutation<R extends any> = {
+  // TODO: jest 类型错误
+  // [K in keyof R]: (params: any) => {type: string; payload: any};
   [K in keyof R]: (params: Parameters<R[K]>[1]) => {type: string; payload: any};
 };
 
 export function create<M extends Mode>(model: M) {
   const actionKeys = Object.keys(model.effects);
   const actions: Action<M["effects"]> = actionKeys.reduce((action, func) => {
-    action[func] = (params, option?: {resolve?: boolean}) => {
-      const isResolve = option && option.resolve;
-      const currentPut = isResolve ? (put as any).resolve : put;
-      return currentPut({
-        type: `${model.namespace}/${func}`,
-        payload: params.payload,
-      });
-    };
+    action[func] = (params) => ({
+      type: `${model.namespace}/${func}`,
+      payload: params.payload,
+    });
     return action;
   }, {} as any);
 
@@ -36,16 +34,16 @@ export function create<M extends Mode>(model: M) {
     (mutation, func) => {
       mutation[func] = (params) => ({
         type: `${model.namespace}/${func}`,
-        payload: params,
+        payload: params.payload,
       });
 
       return mutation;
     },
-    {} as any
+    actions as any
   );
 
   return {
-    actions,
-    mutations,
+    ...mutations,
+    ...actions,
   };
 }
