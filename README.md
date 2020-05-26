@@ -9,7 +9,7 @@
 > store: index.ts
 
 ```ts
-import {call, create} from "@lowinc/dva-t";
+import {create} from "@lowinc/dva-t";
 
 import user from "./user.ts";
 import shop from "./shop.ts";
@@ -34,6 +34,9 @@ export const modules = [user, shop, address];
 ```ts
 import {Dva} from "./index";
 
+const {mutations,actions} = Dva.User
+const helpers = Dva.helpers
+
 export type UserState = typeof modelUser.state;
 
 export default {
@@ -57,13 +60,13 @@ export default {
   },
   effects: {
     *testCall({}, {}) {
-      yield Dva.helpers.call(Taro.showToast, {title: "asd", icon: "none"});
+      yield helpers.call(Taro.showToast, {title: "asd", icon: "none"});
     },
     *testFoo(params: {payload: {name: string; age: number}}) {
-      yield Dva.User.put("testBar", {payload: {name: "lowinc", age: 100}});
+      yield actions.testBar({payload: {name: "lowinc", age: 100}});
     },
     *testBar(params: {payload: {id: string; age: number}}) {
-      yield Dva.User.save("user", {name: "root", age: 18});
+      yield mutations.save({payload:{name: "root", age: 18}});
     },
   },
 };
@@ -73,7 +76,8 @@ export default {
 
 ```ts
 import {Dva} from "@/store";
+const {actions} = Dva.User
 useDidShow(() => {
-  props.dispatch(Dva.User.action("testCall", {payload: {}}));
+  props.dispatch(actions.testCall({payload: {}}));
 });
 ```
