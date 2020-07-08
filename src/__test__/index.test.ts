@@ -24,8 +24,14 @@ const model = {
     },
   },
   effects: {
-    *authBySms({payload}: {payload: {bankCardNo: string}}) {},
-    *resendPaySms({payload}: {payload: {phone: string; isPass: boolean}}) {},
+    *authBySms(
+      {payload}: {payload: {bankCardNo: string}},
+      {put, call, select}
+    ) {},
+    *resendPaySms(
+      {payload}: {payload: {phone: string; isPass: boolean}},
+      {put, call, select}
+    ) {},
   },
 };
 

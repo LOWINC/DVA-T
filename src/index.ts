@@ -7,16 +7,20 @@ type Mode = {
   effects: any;
 };
 
+type ActionPayload<T> = T extends (payload: infer P, dvaUtil?: any) => any
+  ? P
+  : T;
 type Action<R extends any> = {
-  // TODO: jest 类型错误
-  // [K in keyof R]: (params: any) => {type: string; payload: any};
-  [K in keyof R]: (params: Parameters<R[K]>[0]) => {type: string; payload: any};
+  [K in keyof R]: (params: ActionPayload<R[K]>) => {type: string; payload: any};
 };
 
+type MutationPayload<T> = T extends (store: any, payload: infer P) => any
+  ? P
+  : T;
 type Mutation<R extends any> = {
-  // TODO: jest 类型错误
-  // [K in keyof R]: (params: any) => {type: string; payload: any};
-  [K in keyof R]: (params: Parameters<R[K]>[1]) => {type: string; payload: any};
+  [K in keyof R]: (
+    params: MutationPayload<R[K]>
+  ) => {type: string; payload: any};
 };
 
 export function create<M extends Mode>(model: M) {
