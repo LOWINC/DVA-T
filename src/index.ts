@@ -1,5 +1,17 @@
 export {put, call} from "redux-saga/effects";
 
+export interface Params<T> {
+  payload: T;
+  [key: string]: any;
+}
+
+// Params
+// const store = {
+//   effects: {
+//     fetch(params: Params<{name: string}>) {},
+//   },
+// };
+
 type Mode = {
   namespace: any;
   state: any;
