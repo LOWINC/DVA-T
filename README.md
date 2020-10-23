@@ -6,4 +6,4 @@
 
 ## 使用
 
-[Example]('./src/__test__/index.test.ts')
+[Example](https://github.com/LOWINC/DVA-T/blob/master/src/__test__/index.test.ts)
