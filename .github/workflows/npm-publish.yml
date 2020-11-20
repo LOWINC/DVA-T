@@ -15,6 +15,6 @@ jobs:
         node-version: '12.x'
     - run: yarn
     - run: yarn run build
- 
+    - run: npm publish
       env:
-        CI: true
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
